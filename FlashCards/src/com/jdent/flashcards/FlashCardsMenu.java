@@ -157,7 +157,6 @@ public class FlashCardsMenu {
 				}
 				
 				String num = MenuCommand.getNextLine("> ");
-				int select;
 				
 				CardSet cards = cardSetList.getCards(Integer.parseInt(num));
 				cards.reset();

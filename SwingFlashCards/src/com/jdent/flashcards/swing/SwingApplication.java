@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 
 public class SwingApplication {
 	private static final LogManager logManager = LogManager.getLogManager();
-	private static final Logger LOGGER = Logger.getLogger(FlashCardsFrame.class.getName());	
+	private static final Logger LOGGER = Logger.getLogger(SwingApplication.class.getName());	
 	static {
 		try {
 			logManager.readConfiguration(new FileInputStream("./logging.properties"));

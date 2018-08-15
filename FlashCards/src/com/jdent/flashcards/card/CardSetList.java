@@ -7,9 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.jdent.flashcards.Application;
 
 public class CardSetList implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(Application.class.getName());	
 	
 	private ArrayList<CardSet> cardsList = new ArrayList<>();
 	
@@ -44,14 +49,15 @@ public class CardSetList implements Serializable {
 		CardSetList cardSetList;
 		
 		try {
-			System.out.println("load...");
+			LOGGER.log(Level.FINE, "Load CardSetList file {0}", filename);
 			
 			FileInputStream fileIn = new FileInputStream(filename);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			cardSetList = (CardSetList)in.readObject();
 			in.close();
 
-			System.out.println(cardSetList);
+			if (cardSetList != null)
+				LOGGER.fine(cardSetList.toString());
 
 			return cardSetList;
 		}
@@ -59,7 +65,7 @@ public class CardSetList implements Serializable {
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			System.out.println("CardsList class is not found");
+			LOGGER.severe("CardSetList class is not found.");
 			e.printStackTrace();
 		}
 		
@@ -68,8 +74,8 @@ public class CardSetList implements Serializable {
 	
 	public static boolean save(CardSetList cardSetList, String filename) {
 		try {
-			System.out.println("save...");
-			System.out.println(cardSetList);			
+			LOGGER.log(Level.FINE, "Save CardSetList file {0}.", filename);
+			LOGGER.fine(cardSetList.toString());
 			
 			FileOutputStream fileOut = new FileOutputStream(filename);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
