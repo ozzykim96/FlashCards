@@ -27,9 +27,9 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 	
 	public NewCardsPane() {
 		super(new GridBagLayout());
-		LOGGER.info("create newcards pane");
+		LOGGER.info("create NewCards pane.");
 		
-		createPane();
+		createUI();
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		cardSet = (CardSet)obj;
 	}
 	
-	private void createPane() {
+	private void createUI() {
 		questionText = createTextPane();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
 		questionScrollPane.setPreferredSize(
@@ -51,25 +51,18 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		JPanel nextPane = createControlButtonPane();
 
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
+		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(new JLabel("Question:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 1;		
-		add(questionScrollPane, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		add(new JLabel("Answer:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 3;		
-		add(answerScrollPane, gbc);
-		gbc.gridx = 0; 
-		gbc.gridy = 4;		
-		add(nextPane, gbc);		
+		add(new JLabel("Question:"), 
+				builder.reset().grid(0, 0).get());
+		add(questionScrollPane, 
+				builder.reset().grid(0, 1).get());
+		add(new JLabel("Answer:"), 
+				builder.reset().grid(0, 2).get());		
+		add(answerScrollPane, 
+				builder.reset().grid(0, 3).get());
+		add(nextPane, 
+				builder.reset().grid(0, 4).get());		
 	}
 	
 	private JTextPane createTextPane() {

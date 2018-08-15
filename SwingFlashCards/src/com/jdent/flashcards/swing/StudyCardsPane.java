@@ -27,7 +27,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	public StudyCardsPane() {
 		super(new GridBagLayout());
 		
-		createPane();
+		createUI();
 	}
 
 	@Override
@@ -43,15 +43,15 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		answerText.setText("");
 	}
 	
-	private void createPane() {
-		questionText = createTextPane();
+	private void createUI() {
+		questionText = createText();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
 		questionScrollPane.setPreferredSize(
 				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
 		JPanel yesNoPane = createYesNoButtonPane();
 
-		answerText = createTextPane();
+		answerText = createText();
 		JScrollPane answerScrollPane = new JScrollPane(answerText);
 		answerScrollPane.setPreferredSize(
 				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));		
@@ -59,36 +59,23 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		JPanel nextPane = createControlButtonPane();
 
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
+		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(new JLabel("Question:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 1;
-		gbc.weighty = 0.5;
-		add(questionScrollPane, gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 2;
-		gbc.weighty = 0;
-		add(yesNoPane, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.weighty = 0.5;		
-		add(new JLabel("Answer:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 4;
-		gbc.weighty = 0;		
-		add(answerScrollPane, gbc);
-		gbc.gridx = 0; 
-		gbc.gridy = 5;		
-		add(nextPane, gbc);		
+		add(new JLabel("Question:"), 
+				builder.reset().grid(0, 0).get());
+		add(questionScrollPane, 
+				builder.reset().grid(0, 1).weight(1.0, 0.5).get());
+		add(yesNoPane, 
+				builder.reset().grid(0, 2).get());
+		add(new JLabel("Answer:"), 
+				builder.reset().grid(0, 3).get());
+		add(answerScrollPane, 
+				builder.reset().grid(0, 4).weight(1.0, 0.5).get());
+		add(nextPane, 
+				builder.reset().grid(0, 5).get());
 	}
 	
-	private JTextPane createTextPane() {
+	private JTextPane createText() {
 		JTextPane textPane = new JTextPane();
 		textPane.setCaretPosition(0);
 		textPane.setMargin(new Insets(5, 5, 5, 5));

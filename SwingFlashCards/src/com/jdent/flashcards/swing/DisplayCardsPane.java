@@ -35,7 +35,7 @@ public class DisplayCardsPane extends JPanel
 		
 		LOGGER.info("create DisplayCardsPane pane");
 		
-		createPane();
+		createUI();
 	}
 	
 	@Override
@@ -45,8 +45,7 @@ public class DisplayCardsPane extends JPanel
 	
 	@Override
 	public void setContext(Object obj) {
-		cardSet = (CardSet)obj;
-		
+		cardSet = (CardSet)obj;	
 		loadContents();
 	}
 	
@@ -61,7 +60,7 @@ public class DisplayCardsPane extends JPanel
 		}
 	}	
 	
-	private void createPane() {
+	private void createUI() {
 		// create list and scroll pane
 		list = createDisplayCardsList();
 		JScrollPane listScrollPane = new JScrollPane(list);
@@ -73,18 +72,14 @@ public class DisplayCardsPane extends JPanel
 		
 		// add panes to panel
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
+		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(new JLabel("List of Cards:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 1;		
-		add(listScrollPane, gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 2;		
-		add(controlButtonPane, gbc);		
+		add(new JLabel("List of Cards:"), 
+				builder.reset().grid(0, 0).get());
+		add(listScrollPane, 
+				builder.reset().grid(0, 1).weight(1.0, 1.0).get());
+		add(controlButtonPane,
+				builder.reset().grid(0, 2).get());		
 	}
 	
 	private JList<String> createDisplayCardsList() {

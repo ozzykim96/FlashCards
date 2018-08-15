@@ -21,7 +21,7 @@ public class SwingApplication {
 	}
 	
 	public static void main(String[] args) {
-		LOGGER.fine("application is launched.");
+		LOGGER.fine("Application is launched.");
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
