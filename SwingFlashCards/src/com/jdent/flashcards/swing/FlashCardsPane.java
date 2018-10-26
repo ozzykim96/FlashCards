@@ -16,7 +16,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -65,18 +64,18 @@ public class FlashCardsPane extends JPanel
 				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
 		// create a panel for buttons
-		JPanel buttonPane = createControlButtonPane();
+		JPanel controlButtonPane = createControlButtonPane();
 
 		// add to pane
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
 		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
 		add(new JLabel("Select cards:"), 
-				builder.reset().grid(0, 0).get());
+				builder.build().grid(0, 0));
 		add(listScrollPane, 
-				builder.reset().grid(0, 1).weight(1.0, 1.0).get());
-		add(buttonPane, 
-				builder.reset().grid(0, 2).get());
+				builder.build().grid(0, 1).weight(1.0, 1.0));
+		add(controlButtonPane, 
+				builder.build().grid(0, 2));
 	}
 	
 	private void loadContents() {
@@ -86,7 +85,9 @@ public class FlashCardsPane extends JPanel
 		// add cards
 		for (int i = 0; i < cardSetList.getList().size(); i++) {
 			CardSet cards = cardSetList.getCards(i);
-			listModel.addElement(cards.getTitle());
+			String name = cards.getTitle() + "(" + cards.getStudiedCount() + 
+					"/" + cards.getCount() + ")";
+			listModel.addElement(name);
 		}		
 	}
 	
@@ -99,7 +100,7 @@ public class FlashCardsPane extends JPanel
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(this);
-		list.setVisibleRowCount(5);
+		list.setVisibleRowCount(30);
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				JList<String> list = (JList<String>)evt.getSource();					

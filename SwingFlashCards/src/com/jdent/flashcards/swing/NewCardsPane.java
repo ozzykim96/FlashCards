@@ -51,25 +51,20 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		JPanel nextPane = createControlButtonPane();
 
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
+		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(new JLabel("Question:"), gbc);
+		add(new JLabel("Question:"), 
+				builder.build().grid(0, 0));
 		
-		gbc.gridx = 0; 
-		gbc.gridy = 1;		
-		add(questionScrollPane, gbc);
+		add(questionScrollPane, 
+				builder.build().grid(0, 1).weight(1, 0.5));
+		add(new JLabel("Answer:"), 
+				builder.build().grid(0, 2));
 		
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		add(new JLabel("Answer:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 3;		
-		add(answerScrollPane, gbc);
-		gbc.gridx = 0; 
-		gbc.gridy = 4;		
-		add(nextPane, gbc);		
+		add(answerScrollPane, 
+				builder.build().grid(0, 3).weight(1, 0.5));
+		add(nextPane, 
+				builder.build().grid(0, 4));	
 	}
 	
 	private JTextPane createTextPane() {

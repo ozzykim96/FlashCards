@@ -11,23 +11,23 @@ import java.util.ArrayList;
 public class CardSetList implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<CardSet> cardsList = new ArrayList<>();
+	private ArrayList<CardSet> cardSetList = new ArrayList<>();
 	
 	@SuppressWarnings("unchecked")
 	public ArrayList<CardSet> getList() {
-		return (ArrayList<CardSet>)cardsList.clone();
+		return (ArrayList<CardSet>)cardSetList.clone();
 	}
 	
 	public CardSet getCards(int index) {
-		return cardsList.get(index);
+		return cardSetList.get(index);
 	}
 	
 	public void add(CardSet cards) {
-		cardsList.add(cards);
+		cardSetList.add(cards);
 	}
 	
 	public void remove(int index) {
-		cardsList.remove(index);
+		cardSetList.remove(index);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class CardSetList implements Serializable {
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			System.out.println("CardsList class is not found");
+			System.out.println("CardSetList class is not found");
 			e.printStackTrace();
 		}
 		

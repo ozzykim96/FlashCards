@@ -34,9 +34,30 @@ public class CardSet implements Serializable {
 	public ArrayList<Card> getList() {
 		return (ArrayList<Card>)cardList.clone();
 	}
+
+	public int getCount() {
+		return cardList.size();
+	}
+	
+	public int getStudiedCount() {
+		int totalStudied = 0;
+		for (Card card: cardList) {
+			
+			if (card.getStudied())
+				totalStudied++;
+		}
+		
+		return totalStudied;
+	}
 	
 	public void reset() {
 		iter = cardList.iterator();
+	}
+	
+	public void resetStudy() {
+		for (Card card: cardList) {
+			card.setStudied(false);
+		}
 	}
 	
 	public Card next() {
@@ -44,6 +65,20 @@ public class CardSet implements Serializable {
 			iter = cardList.iterator();
 		
 		return iter.next();
+	}
+	
+	public Card nextStudy() {
+		Card card;
+		while (true) {
+			if (!iter.hasNext())
+				iter = cardList.iterator();
+			
+			card = iter.next();
+			if (!card.getStudied())
+				break;
+		}
+		
+		return card;
 	}
 	
 	public void add(String name, String desc) {
@@ -57,6 +92,10 @@ public class CardSet implements Serializable {
 		catch (IllegalStateException e) {
 			System.out.println("No card is shown yet.");
 		}
+	}
+	
+	public void remove(int index) {
+		cardList.remove(index);
 	}
 	
 	@Override

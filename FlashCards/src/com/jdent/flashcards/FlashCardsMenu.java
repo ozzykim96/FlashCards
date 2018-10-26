@@ -157,7 +157,6 @@ public class FlashCardsMenu {
 				}
 				
 				String num = MenuCommand.getNextLine("> ");
-				int select;
 				
 				CardSet cards = cardSetList.getCards(Integer.parseInt(num));
 				cards.reset();
@@ -192,9 +191,12 @@ public class FlashCardsMenu {
 			@Override
 			public ActionHandler onAction(MenuItemContext context) {
 				CardSet cards = (CardSet)context.getContext();
+				String answer;
 
 				Card card = cards.next();
-				MenuCommand.getNextLine(card.getName() + "?");
+				answer = MenuCommand.getNextLine(card.getName() + " (y/n)?");
+				if (answer.equals("y")) 
+					card.setStudied(true);
 				System.out.println(card.getDescription());
 				
 				return context.getMenu();

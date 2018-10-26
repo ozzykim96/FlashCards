@@ -2,11 +2,16 @@ package com.jdent.flashcards.swing;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import com.jdent.flashcards.FlashCards;
@@ -17,10 +22,10 @@ public class FlashCardsFrame extends JFrame {
 	private static FlashCardsFrame flashCardsFrame;
 	
 	private FlashCards flashCards;
-	private JPanel cards;
+	private JPanel cardPane;
 	
-	// item map (action string, JPanel)
-	private Map<String, JPanel> cardsMap = new LinkedHashMap<>();
+	// item map (action String, JPanel)
+	private Map<String, JPanel> cardPaneMap = new LinkedHashMap<>();
 	
 	public FlashCardsFrame() {
 		super("FlashCards");
@@ -38,13 +43,15 @@ public class FlashCardsFrame extends JFrame {
 			flashCards.buildDefaultCardsList();
 		}
 		
+		// create menu bar
+		setJMenuBar(createMenuBar());
+		
 		// create cards panes
-		cards = createCards();
+		cardPane = createCardPanes();
 
 		// set layout for frame
 		setLayout(new BorderLayout());
-		//add(cards, BorderLayout.CENTER);
-		add(cards);
+		add(cardPane);
 		
 		pack();
 		
@@ -69,29 +76,52 @@ public class FlashCardsFrame extends JFrame {
 	public void switchPane(String name, Object obj) {
 		// set context
 		if (obj != null) {
-			CardUIContext context = (CardUIContext)cardsMap.get(name);
+			CardUIContext context = (CardUIContext)cardPaneMap.get(name);
 			context.setContext(obj);		
 		}
 
 		// show card pane
-		CardLayout cl = (CardLayout)cards.getLayout();
-		cl.show(cards, name);
+		CardLayout cl = (CardLayout)cardPane.getLayout();
+		cl.show(cardPane, name);
 	}
+	
+	private JMenuBar createMenuBar() {
+		JMenuBar menuBar;
+		JMenu menu;
+		JMenuItem menuItem;
 		
-	private JPanel createCards() {
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("File");
+		
+		menuItem = new JMenuItem("Exit");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LOGGER.info("exit FlashCards.");
+				
+				System.exit(0);
+			}
+		});
+		menu.add(menuItem);
+
+		menuBar.add(menu);
+		return menuBar;
+	}
+	
+	private JPanel createCardPanes() {
 		// create all panes
-		cardsMap.put(Constants.FLASHCARDS_PANE, new FlashCardsPane());
-		cardsMap.put(Constants.STUDYCARDS_PANE, new StudyCardsPane());
-		cardsMap.put(Constants.DISPLAYCARDS_PANE, new DisplayCardsPane());
-		cardsMap.put(Constants.NEWCARDS_PANE, new NewCardsPane());
+		cardPaneMap.put(Constants.FLASHCARDS_PANE, new FlashCardsPane());
+		cardPaneMap.put(Constants.STUDYCARDS_PANE, new StudyCardsPane());
+		cardPaneMap.put(Constants.DISPLAYCARDS_PANE, new DisplayCardsPane());
+		cardPaneMap.put(Constants.NEWCARDS_PANE, new NewCardsPane());
 		
 		// create card layout pane
 		JPanel cards = new JPanel(new CardLayout());
 		
-		cards.add(cardsMap.get(Constants.FLASHCARDS_PANE), Constants.FLASHCARDS_PANE);
-		cards.add(cardsMap.get(Constants.STUDYCARDS_PANE), Constants.STUDYCARDS_PANE);
-		cards.add(cardsMap.get(Constants.DISPLAYCARDS_PANE), Constants.DISPLAYCARDS_PANE);
-		cards.add(cardsMap.get(Constants.NEWCARDS_PANE), Constants.NEWCARDS_PANE);
+		cards.add(cardPaneMap.get(Constants.FLASHCARDS_PANE), Constants.FLASHCARDS_PANE);
+		cards.add(cardPaneMap.get(Constants.STUDYCARDS_PANE), Constants.STUDYCARDS_PANE);
+		cards.add(cardPaneMap.get(Constants.DISPLAYCARDS_PANE), Constants.DISPLAYCARDS_PANE);
+		cards.add(cardPaneMap.get(Constants.NEWCARDS_PANE), Constants.NEWCARDS_PANE);
 		cards.setOpaque(true);
 		
 		return cards;

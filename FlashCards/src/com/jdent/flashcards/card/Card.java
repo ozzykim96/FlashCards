@@ -7,10 +7,12 @@ public class Card implements Serializable {
 	
 	private String name;
 	private String description;
+	private boolean studied;
 	
 	public Card(String name, String description) {
 		this.name = name;
 		this.description = description;
+		this.studied = false;
 	}
 	
 	public String getName() {
@@ -21,8 +23,17 @@ public class Card implements Serializable {
 		return description;
 	}
 	
+	public boolean getStudied() {
+		return studied;
+	}
+	
+	public void setStudied(boolean studied) {
+		this.studied = studied;
+	}
+	
 	@Override
 	public String toString() {
-		return name + ":" + description;
+		String ox = studied ? "(O)" : "(X)";
+		return name + ":" + description + ":" + ox;
 	}
 }

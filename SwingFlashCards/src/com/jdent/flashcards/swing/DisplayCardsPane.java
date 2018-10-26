@@ -11,6 +11,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -73,18 +74,14 @@ public class DisplayCardsPane extends JPanel
 		
 		// add panes to panel
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
+		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
 		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(new JLabel("List of Cards:"), gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 1;		
-		add(listScrollPane, gbc);
-		
-		gbc.gridx = 0; 
-		gbc.gridy = 2;		
-		add(controlButtonPane, gbc);		
+		add(new JLabel("List of Cards:"), 
+				builder.build().grid(0, 0));
+		add(listScrollPane, 
+				builder.build().grid(0, 1).weight(1.0, 1.0));		
+		add(controlButtonPane, 
+				builder.build().grid(0, 2));		
 	}
 	
 	private JList<String> createDisplayCardsList() {
@@ -95,7 +92,7 @@ public class DisplayCardsPane extends JPanel
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(this);
-		list.setVisibleRowCount(5);
+		list.setVisibleRowCount(30);
 		
 		return list;
 	}
@@ -114,6 +111,22 @@ public class DisplayCardsPane extends JPanel
 				FlashCardsFrame.getInstance().switchPane(Constants.NEWCARDS_PANE, cardSet);
 			}
 		});
+		JButton deleteCardButton = new JButton("Delete a card");
+		deleteCardButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int index = list.getSelectedIndex();
+				
+				if (index >= 0) {
+					int dialogResult = JOptionPane.showConfirmDialog(
+							null, "Would you like to delete this card?", "Warning", JOptionPane.YES_NO_OPTION);
+					if (dialogResult == JOptionPane.YES_NO_OPTION) {
+						cardSet.remove(index);
+						
+						loadContents();
+					}
+				}
+			}
+		});
 		
 		JButton previousMenuButton = new JButton("Previous menu");
 		previousMenuButton.addActionListener(new ActionListener() {
@@ -126,6 +139,7 @@ public class DisplayCardsPane extends JPanel
 		JPanel buttonPane = new JPanel();
 		buttonPane.add(studyButton);
 		buttonPane.add(addCardButton);
+		buttonPane.add(deleteCardButton);
 		buttonPane.add(previousMenuButton);
 		
 		return buttonPane;
