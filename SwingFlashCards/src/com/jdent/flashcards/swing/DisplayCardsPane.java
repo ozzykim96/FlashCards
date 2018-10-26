@@ -36,7 +36,7 @@ public class DisplayCardsPane extends JPanel
 		
 		LOGGER.info("create DisplayCardsPane pane");
 		
-		createPane();
+		createUI();
 	}
 	
 	@Override
@@ -46,8 +46,7 @@ public class DisplayCardsPane extends JPanel
 	
 	@Override
 	public void setContext(Object obj) {
-		cardSet = (CardSet)obj;
-		
+		cardSet = (CardSet)obj;	
 		loadContents();
 	}
 	
@@ -62,7 +61,7 @@ public class DisplayCardsPane extends JPanel
 		}
 	}	
 	
-	private void createPane() {
+	private void createUI() {
 		// create list and scroll pane
 		list = createDisplayCardsList();
 		JScrollPane listScrollPane = new JScrollPane(list);

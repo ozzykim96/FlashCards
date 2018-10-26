@@ -34,11 +34,11 @@ public class FlashCardsFrame extends JFrame {
 		// flash cards
 		flashCards = new FlashCards();
 		
-		LOGGER.info("load FlashCards.");
+		LOGGER.info("Load FlashCards.");
 		
 		// load saved flash cards
 		if (!flashCards.load()) {
-			LOGGER.warning("Loading failed. load default card sets");
+			LOGGER.warning("Loading failed. Load default card sets");
 			
 			flashCards.buildDefaultCardsList();
 		}
@@ -61,7 +61,7 @@ public class FlashCardsFrame extends JFrame {
 		    	
 		    	// TODO: save flashcards
 		    	
-		    	LOGGER.info("exit FlashCards.");
+		    	LOGGER.info("Exit FlashCards.");
 		    }
 		});		
 		

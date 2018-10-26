@@ -36,10 +36,9 @@ public class FlashCardsPane extends JPanel
 	public FlashCardsPane() {
 		super(new GridBagLayout());
 		
-		LOGGER.info("create flashcards pane");
+		LOGGER.info("create FlashCards pane.");
 		
-		// create UI pane
-		createPane();
+		createUI();
 	}
 	
 	@Override
@@ -54,7 +53,7 @@ public class FlashCardsPane extends JPanel
 		loadContents();
 	}
 	
-	private void createPane() {
+	private void createUI() {
 		// create the list and put it in a scroll pane.
 		list = createDisplayCardsetList();
 		

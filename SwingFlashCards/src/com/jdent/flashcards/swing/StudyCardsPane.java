@@ -27,7 +27,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	public StudyCardsPane() {
 		super(new GridBagLayout());
 		
-		createPane();
+		createUI();
 	}
 
 	@Override
@@ -43,15 +43,15 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		answerText.setText("");
 	}
 	
-	private void createPane() {
-		questionText = createTextPane();
+	private void createUI() {
+		questionText = createText();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
 		questionScrollPane.setPreferredSize(
 				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
 		JPanel yesNoPane = createYesNoButtonPane();
 
-		answerText = createTextPane();
+		answerText = createText();
 		JScrollPane answerScrollPane = new JScrollPane(answerText);
 		answerScrollPane.setPreferredSize(
 				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));		
@@ -75,7 +75,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 				builder.build().grid(0, 5));		
 	}
 	
-	private JTextPane createTextPane() {
+	private JTextPane createText() {
 		JTextPane textPane = new JTextPane();
 		textPane.setCaretPosition(0);
 		textPane.setMargin(new Insets(5, 5, 5, 5));
