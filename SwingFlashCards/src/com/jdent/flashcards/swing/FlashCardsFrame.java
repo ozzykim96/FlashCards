@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,6 +22,8 @@ public class FlashCardsFrame extends JFrame {
 	private static final Logger LOGGER = Logger.getLogger(FlashCardsFrame.class.getName());	
 	private static FlashCardsFrame flashCardsFrame;
 	
+	private Preferences node;
+	
 	private FlashCards flashCards;
 	private JPanel cardPane;
 	
@@ -31,10 +34,10 @@ public class FlashCardsFrame extends JFrame {
 		super("FlashCards");
 		flashCardsFrame = this;
 
-		// flash cards
-		flashCards = new FlashCards();
-		
 		LOGGER.info("Load FlashCards.");
+
+		// flash cards
+		flashCards = new FlashCards();		
 		
 		// load saved flash cards
 		if (!flashCards.load()) {
@@ -42,6 +45,9 @@ public class FlashCardsFrame extends JFrame {
 			
 			flashCards.buildDefaultCardsList();
 		}
+		
+		// frame initialization
+		onLoadingFrame();
 		
 		// create menu bar
 		setJMenuBar(createMenuBar());
@@ -57,11 +63,10 @@ public class FlashCardsFrame extends JFrame {
 		
 		addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {		    	
+		    	onClosingFrame();
 		    	
-		    	// TODO: save flashcards
-		    	
-		    	LOGGER.info("Exit FlashCards.");
+		    	LOGGER.info("Closing FlashCards.");
 		    }
 		});		
 		
@@ -99,8 +104,9 @@ public class FlashCardsFrame extends JFrame {
 		menuItem = new JMenuItem("Exit");
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LOGGER.info("exit FlashCards.");
+				LOGGER.info("Exit FlashCards.");
 				
+				onClosingFrame();
 				System.exit(0);
 			}
 		});
@@ -127,5 +133,25 @@ public class FlashCardsFrame extends JFrame {
 		cards.setOpaque(true);
 		
 		return cards;
+	}
+	
+	private void onLoadingFrame() {
+		Preferences root = Preferences.userRoot();
+		node = root.node("/com/jdent/flashcards/swing");
+		
+		int left = node.getInt("left", 0);
+		int top = node.getInt("top", 0);
+		int width = node.getInt("width", Constants.DEFAULT_FRAME_WIDTH);
+		int height = node.getInt("height", Constants.DEFAULT_FRAME_HEIGHT);
+		setBounds(left, top, width, height);
+	}
+	
+	private void onClosingFrame() {
+		assert node != null;
+		
+        node.putInt("left", getX());
+        node.putInt("top", getY());
+        node.putInt("width", getWidth());
+        node.putInt("height", getHeight());
 	}
 }

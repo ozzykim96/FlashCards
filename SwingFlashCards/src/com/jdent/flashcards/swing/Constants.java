@@ -1,8 +1,13 @@
 package com.jdent.flashcards.swing;
 
 public final class Constants {
+	public static final int DEFAULT_FRAME_WIDTH		= 400;
+	public static final int DEFAULT_FRAME_HEIGHT	= 300;
+	
 	public static final int DEFAULT_LIST_WIDTH  	= 250;
 	public static final int DEFAULT_LIST_HEIGHT 	= 100;
+	
+	public static final int LIST_ITEM_FONT_SIZE		= 16;
 	
 	public static final String FLASHCARDS_PANE		= "FLASHCARDS";
 	public static final String DISPLAYCARDS_PANE	= "DISPLAYCARDS";

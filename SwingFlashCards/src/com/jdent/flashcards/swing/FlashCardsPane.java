@@ -1,6 +1,8 @@
 package com.jdent.flashcards.swing;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +18,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -31,8 +34,8 @@ public class FlashCardsPane extends JPanel
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = Logger.getLogger(FlashCardsPane.class.getName());
 	
-	private JList<String> list;
-	private DefaultListModel<String> listModel;
+	private JList<CardSet> list;
+	private DefaultListModel<CardSet> listModel;
 	private CardSetList cardSetList;
 	
 	private JButton selectButton;
@@ -95,9 +98,7 @@ public class FlashCardsPane extends JPanel
 		// add cards
 		for (int i = 0; i < cardSetList.getList().size(); i++) {
 			CardSet cards = cardSetList.getCards(i);
-			String name = cards.getTitle() + "(" + cards.getStudiedCount() + 
-					"/" + cards.getCount() + ")";
-			listModel.addElement(name);
+			listModel.addElement(cards);
 		}
 	}
 	
@@ -115,15 +116,16 @@ public class FlashCardsPane extends JPanel
 	}
 	
 	@SuppressWarnings("unchecked")
-	private JList<String> createDisplayCardsetList() {
+	private JList<CardSet> createDisplayCardsetList() {
 		listModel = new DefaultListModel<>();
 						
 		// create the list and put it in a scroll pane.
-		JList<String> list = new JList<>(listModel);
+		JList<CardSet> list = new JList<>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setCellRenderer(new CardSetRenderer());
 		list.setSelectedIndex(0);
+		
 		list.addListSelectionListener(this);
-		list.setVisibleRowCount(30);
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				JList<String> list = (JList<String>)evt.getSource();					
@@ -198,5 +200,35 @@ public class FlashCardsPane extends JPanel
 		buttonPane.add(deleteButton);
 		
 		return buttonPane;
+	}
+	
+	private class CardSetRenderer extends JLabel implements ListCellRenderer<CardSet> {
+		private static final long serialVersionUID = 1L;
+
+		public CardSetRenderer() {
+			setOpaque(true);
+		}
+		
+		@Override
+		public Component getListCellRendererComponent(JList<? extends CardSet> list, 
+				CardSet cardSet, int index, boolean isSelected, boolean cellHasFocus) {
+			
+			// refer to "https://way2java.com/swing/jlabel-multiline-text/"
+			String text = "<html>"+ cardSet.getTitle() + "(" + cardSet.getStudiedCount() + 
+					"/" + cardSet.getCount() + ")";
+			
+			//setFont(new Font(getFont().getName(), Font.PLAIN, 20));
+			setText(text);
+			
+			if (isSelected) {
+			    setBackground(list.getSelectionBackground());
+			    setForeground(list.getSelectionForeground());
+			} else {
+			    setBackground(list.getBackground());
+			    setForeground(list.getForeground());
+			}
+			
+			return this;
+		}
 	}
 }
