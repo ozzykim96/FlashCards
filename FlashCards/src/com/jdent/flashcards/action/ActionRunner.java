@@ -2,7 +2,7 @@ package com.jdent.flashcards.action;
 
 /**
  * ActionRunner 
- * get command and do action until there is no returned action handler.
+ * get command and do action until there is no action handler returned.
  * - it runs series of actions.
  * 
  * @author CJY

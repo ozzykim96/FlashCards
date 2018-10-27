@@ -42,7 +42,6 @@ public class CardSet implements Serializable {
 	public int getStudiedCount() {
 		int totalStudied = 0;
 		for (Card card: cardList) {
-			
 			if (card.getStudied())
 				totalStudied++;
 		}
@@ -69,6 +68,10 @@ public class CardSet implements Serializable {
 	
 	public Card nextStudy() {
 		Card card;
+		
+		if (getStudiedCount() == cardList.size())
+			return null;
+		
 		while (true) {
 			if (!iter.hasNext())
 				iter = cardList.iterator();

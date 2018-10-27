@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import com.jdent.flashcards.card.CardSet;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
 
 public class NewCardsPane extends JPanel implements CardUIContext {
 	private static final long serialVersionUID = 1L;
@@ -35,6 +36,11 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 	@Override
 	public void setContext(Object obj) {
 		cardSet = (CardSet)obj;
+	}
+	
+	@Override
+	public void refreshContents() {
+		
 	}
 	
 	private void createUI() {
@@ -92,8 +98,8 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 			}
 		});
 		
-		JButton previousMenuButton = new JButton("Previous Menu");
-		previousMenuButton.addActionListener(new ActionListener() {
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, cardSet);
 			}
@@ -101,7 +107,7 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 
 		JPanel nextPane = new JPanel();
 		nextPane.add(saveButton);
-		nextPane.add(previousMenuButton);
+		nextPane.add(backButton);
 		
 		return nextPane;
 	}	

@@ -79,6 +79,9 @@ public class Menu implements ActionHandler {
 		System.out.println("---------------");
 	}
 	
+	/**
+	 * find menu item from command. if found, its onAction is called.
+	 */
 	@Override
 	public ActionHandler doAction(Command command) {
 		ActionHandler handler = this;

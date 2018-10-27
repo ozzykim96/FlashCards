@@ -8,16 +8,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import com.jdent.flashcards.card.Card;
 import com.jdent.flashcards.card.CardSet;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
 
 public class StudyCardsPane extends JPanel implements CardUIContext {
 	private static final long serialVersionUID = 1L;
 	private CardSet cardSet;
+	private Card currentCard;
 	
 	private JTextPane questionText;
 	private JTextPane answerText;
@@ -35,12 +38,17 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		cardSet = (CardSet)obj;
 		cardSet.reset();
 		
-		Card card = cardSet.next();
-		question = card.getName();
-		answer = card.getDescription();
+		currentCard = cardSet.next();
+		question = currentCard.getName();
+		answer = currentCard.getDescription();
 		
 		questionText.setText(question);
 		answerText.setText("");
+	}
+	
+	@Override
+	public void refreshContents() {
+		
 	}
 	
 	private void createUI() {
@@ -89,6 +97,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				answerText.setText(answer);
+				currentCard.setStudied(true);
 			}
 		});
 		JButton noButton = new JButton("No");
@@ -108,20 +117,27 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	}
 	
 	private JPanel createControlButtonPane() {
-		JButton nextButton = new JButton("Next Card");
+		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Card card = cardSet.next();
-				question = card.getName();
-				answer = card.getDescription();
+				currentCard = cardSet.nextStudy();
+				if (currentCard != null) {
+					question = currentCard.getName();
+					answer = currentCard.getDescription();
+					
+					questionText.setText(question);
+					answerText.setText("");										
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No cards to study.");
+					FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, null);
+				}
 				
-				questionText.setText(question);
-				answerText.setText("");
 			}
 		});
-		JButton previousMenuButton = new JButton("Previous Menu");
-		previousMenuButton.addActionListener(new ActionListener() {
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, null);
@@ -130,7 +146,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		
 		JPanel nextPane = new JPanel();
 		nextPane.add(nextButton);
-		nextPane.add(previousMenuButton);
+		nextPane.add(backButton);
 		
 		return nextPane;
 	}

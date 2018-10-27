@@ -1,4 +1,4 @@
-package com.jdent.flashcards.swing;
+package com.jdent.flashcards.swing.ui.tool;
 
 import java.awt.GridBagConstraints;
 

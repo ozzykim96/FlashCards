@@ -22,6 +22,8 @@ import javax.swing.event.ListSelectionListener;
 
 import com.jdent.flashcards.card.CardSet;
 import com.jdent.flashcards.card.CardSetList;
+import com.jdent.flashcards.swing.ui.FlashCardsLabel;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
 
 public class FlashCardsPane extends JPanel 
 		implements ListSelectionListener, CardUIContext {
@@ -32,6 +34,9 @@ public class FlashCardsPane extends JPanel
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
 	private CardSetList cardSetList;
+	
+	private JButton selectButton;
+	private JButton deleteButton;
 
 	public FlashCardsPane() {
 		super(new GridBagLayout());
@@ -43,7 +48,7 @@ public class FlashCardsPane extends JPanel
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
+		refreshUI();
 	}
 	
 	@Override
@@ -51,6 +56,12 @@ public class FlashCardsPane extends JPanel
 		cardSetList = (CardSetList)obj;
 		
 		loadContents();
+	}
+	
+	@Override
+	public void refreshContents() {
+		loadContents();
+		refreshUI();
 	}
 	
 	private void createUI() {
@@ -87,7 +98,20 @@ public class FlashCardsPane extends JPanel
 			String name = cards.getTitle() + "(" + cards.getStudiedCount() + 
 					"/" + cards.getCount() + ")";
 			listModel.addElement(name);
-		}		
+		}
+	}
+	
+	private void refreshUI() {
+		int index = list.getSelectedIndex();
+		
+		if (index >= 0) {
+			selectButton.setEnabled(true);
+			deleteButton.setEnabled(true);
+		}
+		else {
+			selectButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -107,10 +131,10 @@ public class FlashCardsPane extends JPanel
 					int index = list.locationToIndex(evt.getPoint());
 					
 					if (index >= 0) {
-						CardSet cards = cardSetList.getCards(index);
+						CardSet cardSet = cardSetList.getCards(index);
 						
 						FlashCardsFrame.getInstance()
-								.switchPane(Constants.DISPLAYCARDS_PANE, cards);						
+								.switchPane(Constants.DISPLAYCARDS_PANE, cardSet);						
 					}
 				}
 			}
@@ -120,8 +144,20 @@ public class FlashCardsPane extends JPanel
 	}
 	
 	private JPanel createControlButtonPane() {
-		// create buttons
-		JButton createButton = new JButton("Create a set of cards");
+		selectButton = new JButton("Select");
+		selectButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int index = list.getSelectedIndex();
+				
+				if (index >= 0) {
+					CardSet cardSet = cardSetList.getCards(index);
+					FlashCardsFrame.getInstance()
+						.switchPane(Constants.DISPLAYCARDS_PANE, cardSet);
+				}				
+			}
+		});
+		JButton createButton = new JButton("Create");
 		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -137,7 +173,7 @@ public class FlashCardsPane extends JPanel
 				}
 			}			
 		});
-		JButton deleteButton = new JButton("Delete a set of cards");
+		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -157,6 +193,7 @@ public class FlashCardsPane extends JPanel
 		
 		// create a panel for buttons
 		JPanel buttonPane = new JPanel();
+		buttonPane.add(selectButton);
 		buttonPane.add(createButton);
 		buttonPane.add(deleteButton);
 		

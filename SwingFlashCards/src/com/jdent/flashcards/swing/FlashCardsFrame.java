@@ -74,11 +74,14 @@ public class FlashCardsFrame extends JFrame {
 	}
 	
 	public void switchPane(String name, Object obj) {
+		CardUIContext context = (CardUIContext)cardPaneMap.get(name);
+		assert context != null;
+		
 		// set context
 		if (obj != null) {
-			CardUIContext context = (CardUIContext)cardPaneMap.get(name);
 			context.setContext(obj);		
 		}
+		context.refreshContents();
 
 		// show card pane
 		CardLayout cl = (CardLayout)cardPane.getLayout();
@@ -91,7 +94,6 @@ public class FlashCardsFrame extends JFrame {
 		JMenuItem menuItem;
 		
 		menuBar = new JMenuBar();
-		
 		menu = new JMenu("File");
 		
 		menuItem = new JMenuItem("Exit");

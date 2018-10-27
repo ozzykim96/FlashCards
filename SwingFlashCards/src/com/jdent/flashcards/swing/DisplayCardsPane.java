@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.jdent.flashcards.card.Card;
 import com.jdent.flashcards.card.CardSet;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
 
 public class DisplayCardsPane extends JPanel 
 		implements ListSelectionListener, CardUIContext {
@@ -33,7 +34,6 @@ public class DisplayCardsPane extends JPanel
 
 	public DisplayCardsPane() {
 		super(new GridBagLayout());
-		
 		LOGGER.info("create DisplayCardsPane pane");
 		
 		createUI();
@@ -47,6 +47,11 @@ public class DisplayCardsPane extends JPanel
 	@Override
 	public void setContext(Object obj) {
 		cardSet = (CardSet)obj;	
+		loadContents();
+	}
+	
+	@Override
+	public void refreshContents() {
 		loadContents();
 	}
 	
@@ -98,26 +103,50 @@ public class DisplayCardsPane extends JPanel
 	
 	private JPanel createControlButtonPane() {
 		// create buttons
-		JButton studyButton = new JButton("Study cards");
+		JButton studyButton = new JButton("Study");
 		studyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.STUDYCARDS_PANE, cardSet);
+				
+				if (cardSet.getStudiedCount() == cardSet.getCount()) {
+					JOptionPane.showMessageDialog(FlashCardsFrame.getInstance(), "No cards to study.");
+				}
+				else {
+					FlashCardsFrame.getInstance().switchPane(Constants.STUDYCARDS_PANE, cardSet);	
+				}				
 			}
 		});
-		JButton addCardButton = new JButton("Add a card");
+		JButton resetButton = new JButton("Reset");
+		resetButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int dialogResult = JOptionPane.showConfirmDialog(
+						FlashCardsFrame.getInstance(), 
+						"Would you like to study again?", "Warning", 
+						JOptionPane.YES_NO_OPTION);
+				if (dialogResult == JOptionPane.YES_NO_OPTION) {
+					cardSet.resetStudy();
+					
+					loadContents();
+				}
+			}
+		});
+		
+		JButton addCardButton = new JButton("Add");
 		addCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FlashCardsFrame.getInstance().switchPane(Constants.NEWCARDS_PANE, cardSet);
 			}
 		});
-		JButton deleteCardButton = new JButton("Delete a card");
+		JButton deleteCardButton = new JButton("Delete");
 		deleteCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = list.getSelectedIndex();
 				
 				if (index >= 0) {
 					int dialogResult = JOptionPane.showConfirmDialog(
-							null, "Would you like to delete this card?", "Warning", JOptionPane.YES_NO_OPTION);
+							FlashCardsFrame.getInstance(), 
+							"Would you like to delete this card?", "Warning", 
+							JOptionPane.YES_NO_OPTION);
 					if (dialogResult == JOptionPane.YES_NO_OPTION) {
 						cardSet.remove(index);
 						
@@ -127,8 +156,8 @@ public class DisplayCardsPane extends JPanel
 			}
 		});
 		
-		JButton previousMenuButton = new JButton("Previous menu");
-		previousMenuButton.addActionListener(new ActionListener() {
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FlashCardsFrame.getInstance().switchPane(Constants.FLASHCARDS_PANE, null);
 			}
@@ -137,9 +166,10 @@ public class DisplayCardsPane extends JPanel
 		// create a panel for buttons
 		JPanel buttonPane = new JPanel();
 		buttonPane.add(studyButton);
+		buttonPane.add(resetButton);
 		buttonPane.add(addCardButton);
 		buttonPane.add(deleteCardButton);
-		buttonPane.add(previousMenuButton);
+		buttonPane.add(backButton);
 		
 		return buttonPane;
 	}

@@ -132,6 +132,19 @@ public class FlashCardsMenu {
 			}
 		});
 		
+		// reset study
+		MenuItem resetStudy = new MenuItem("reset study");
+		resetStudy.setAction(new MenuItemAction() {
+			@Override
+			public ActionHandler onAction(MenuItemContext context) {
+				CardSet cards = (CardSet)context.getContext();
+				
+				cards.resetStudy();
+				
+				return context.getMenu();
+			}
+		});
+		
 		// select cards menu
 		Menu selectCards = new Menu(parent);
 		selectCards.setTitile("Select Cards");
@@ -140,8 +153,10 @@ public class FlashCardsMenu {
 		selectCards.add("d", displayCards);
 		selectCards.add("s", createStudyCard(selectCards));
 		selectCards.add("a", addCard);
+		selectCards.add("r", resetStudy);
 		selectCards.add("b", DefaultMenuItemFactory.createBackMenuItem());
 		
+		// select card set item. when selected, returns selectCards menu.
 		MenuItem selectCardsItem = new MenuItem("select cards");
 		selectCardsItem.setAction(new MenuItemAction() {
 			@Override
@@ -149,13 +164,14 @@ public class FlashCardsMenu {
 				
 				CardSetList cardSetList = (CardSetList)context.getContext();
 				
-				// show cards list
+				// show card set list
 				for (int i = 0; i < cardSetList.getList().size(); i++) {
 					System.out.print(i + ":");
 					CardSet cards = cardSetList.getCards(i);
 					System.out.println(cards.getTitle());
 				}
 				
+				// select card set
 				String num = MenuCommand.getNextLine("> ");
 				
 				CardSet cards = cardSetList.getCards(Integer.parseInt(num));
@@ -163,7 +179,6 @@ public class FlashCardsMenu {
 				
 				// set cards to study menu context
 				selectCards.setContext(cards);
-				
 				selectCards.show();
 				
 				return selectCards;				
@@ -193,7 +208,16 @@ public class FlashCardsMenu {
 				CardSet cards = (CardSet)context.getContext();
 				String answer;
 
-				Card card = cards.next();
+				Card card = cards.nextStudy();
+				if (card == null) {
+					Menu parent = context.getMenu().getParent();
+					
+					System.out.println("No cards to study.");
+					parent.show();
+					
+					return parent;
+				}
+				
 				answer = MenuCommand.getNextLine(card.getName() + " (y/n)?");
 				if (answer.equals("y")) 
 					card.setStudied(true);
