@@ -1,6 +1,7 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -24,8 +25,6 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	
 	private JTextPane questionText;
 	private JTextPane answerText;
-	private String question;
-	private String answer;
 	
 	public StudyCardsPane() {
 		super(new GridBagLayout());
@@ -39,11 +38,9 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		cardSet.reset();
 		
 		currentCard = cardSet.next();
-		question = currentCard.getName();
-		answer = currentCard.getDescription();
 		
-		questionText.setText(question);
-		answerText.setText("");
+		setQuestionText(currentCard.getName());
+		setAnswerText("");
 	}
 	
 	@Override
@@ -52,17 +49,13 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	}
 	
 	private void createUI() {
-		questionText = createText();
+		questionText = createQuestionPane();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
-		questionScrollPane.setPreferredSize(
-				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
 		JPanel yesNoPane = createYesNoButtonPane();
 
-		answerText = createText();
+		answerText = createAnswerPane();
 		JScrollPane answerScrollPane = new JScrollPane(answerText);
-		answerScrollPane.setPreferredSize(
-				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));		
 				
 		JPanel nextPane = createControlButtonPane();
 
@@ -72,23 +65,41 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		add(new JLabel("Question:"), 
 				builder.build().grid(0, 0));
 		add(questionScrollPane, 
-				builder.build().grid(0, 1).weight(1, 0.5));
+				builder.build().grid(0, 1).weight(1, 0.3));
 		add(yesNoPane, 
 				builder.build().grid(0, 2));
 		add(new JLabel("Answer:"), 
 				builder.build().grid(0, 3));		
 		add(answerScrollPane, 
-				builder.build().grid(0, 4).weight(1, 0.5));
+				builder.build().grid(0, 4).weight(1, 0.7));
 		add(nextPane, 
 				builder.build().grid(0, 5));		
 	}
 	
-	private JTextPane createText() {
+	private JTextPane createQuestionPane() {
 		JTextPane textPane = new JTextPane();
 		textPane.setCaretPosition(0);
-		textPane.setMargin(new Insets(5, 5, 5, 5));
 		
+		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
+				Constants.QUESTION_PANE_TEXT_FONT_SIZE));
 		return textPane;
+	}
+	
+	private JTextPane createAnswerPane() {
+		JTextPane textPane = new JTextPane();
+		textPane.setCaretPosition(0);
+		
+		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
+				Constants.ANSWER_PANE_TEXT_FONT_SIZE));
+		return textPane;		
+	}
+	
+	private void setQuestionText(String text) {
+		questionText.setText(text);
+	}
+	
+	private void setAnswerText(String text) {
+		answerText.setText(text);
 	}
 
 	private JPanel createYesNoButtonPane() {
@@ -96,7 +107,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		yesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				answerText.setText(answer);
+				setAnswerText(currentCard.getDescription());
 				currentCard.setStudied(true);
 			}
 		});
@@ -104,7 +115,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		noButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				answerText.setText(answer);
+				setAnswerText(currentCard.getDescription());
 			}
 		});
 		
@@ -123,11 +134,8 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 			public void actionPerformed(ActionEvent e) {
 				currentCard = cardSet.nextStudy();
 				if (currentCard != null) {
-					question = currentCard.getName();
-					answer = currentCard.getDescription();
-					
-					questionText.setText(question);
-					answerText.setText("");										
+					setQuestionText(currentCard.getName());
+					setAnswerText("");
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No cards to study.");

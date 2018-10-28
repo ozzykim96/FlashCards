@@ -37,6 +37,7 @@ public class FlashCardsPane extends JPanel
 	private JList<CardSet> list;
 	private DefaultListModel<CardSet> listModel;
 	private CardSetList cardSetList;
+	private int previousIndex = -1;
 	
 	private JButton selectButton;
 	private JButton deleteButton;
@@ -64,6 +65,11 @@ public class FlashCardsPane extends JPanel
 	@Override
 	public void refreshContents() {
 		loadContents();
+		
+		int index = list.getSelectedIndex();
+		if (index >= 0)
+			previousIndex = index;
+		
 		refreshUI();
 	}
 	
@@ -73,8 +79,6 @@ public class FlashCardsPane extends JPanel
 		
 		// scroll pane
 		JScrollPane listScrollPane = new JScrollPane(list);
-		listScrollPane.setPreferredSize(
-				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
 		// create a panel for buttons
 		JPanel controlButtonPane = createControlButtonPane();
@@ -104,15 +108,30 @@ public class FlashCardsPane extends JPanel
 	
 	private void refreshUI() {
 		int index = list.getSelectedIndex();
+		boolean selected = false;
 		
-		if (index >= 0) {
+		if (index < 0) {
+			if (previousIndex >= 0 && previousIndex < cardSetList.getList().size()) {
+				list.setSelectedIndex(previousIndex);			
+				selected = true;
+			}
+			else if (cardSetList.getList().size() > 0) {
+				list.setSelectedIndex(0);
+				selected = true;
+			}
+		}
+		else {
+			selected = true;
+		}
+		
+		if (selected) {
 			selectButton.setEnabled(true);
-			deleteButton.setEnabled(true);
+			deleteButton.setEnabled(true);						
 		}
 		else {
 			selectButton.setEnabled(false);
-			deleteButton.setEnabled(false);
-		}
+			deleteButton.setEnabled(false);				
+		}		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -153,6 +172,8 @@ public class FlashCardsPane extends JPanel
 				int index = list.getSelectedIndex();
 				
 				if (index >= 0) {
+					previousIndex = index;
+					
 					CardSet cardSet = cardSetList.getCards(index);
 					FlashCardsFrame.getInstance()
 						.switchPane(Constants.DISPLAYCARDS_PANE, cardSet);
@@ -187,7 +208,7 @@ public class FlashCardsPane extends JPanel
 					if (dialogResult == JOptionPane.YES_NO_OPTION) {
 						cardSetList.remove(index);	
 						
-						loadContents();
+						refreshContents();
 					}
 				}
 			}
@@ -213,12 +234,7 @@ public class FlashCardsPane extends JPanel
 		public Component getListCellRendererComponent(JList<? extends CardSet> list, 
 				CardSet cardSet, int index, boolean isSelected, boolean cellHasFocus) {
 			
-			// refer to "https://way2java.com/swing/jlabel-multiline-text/"
-			String text = "<html>"+ cardSet.getTitle() + "(" + cardSet.getStudiedCount() + 
-					"/" + cardSet.getCount() + ")";
-			
-			//setFont(new Font(getFont().getName(), Font.PLAIN, 20));
-			setText(text);
+			setText(getFormattedText(cardSet));
 			
 			if (isSelected) {
 			    setBackground(list.getSelectionBackground());
@@ -229,6 +245,15 @@ public class FlashCardsPane extends JPanel
 			}
 			
 			return this;
+		}
+
+		
+		private String getFormattedText(CardSet cardSet) {
+			// refer to "https://way2java.com/swing/jlabel-multiline-text/"
+			String text = "<html><h1>"+ cardSet.getTitle() + " (" + cardSet.getStudiedCount() + 
+					"/" + cardSet.getCount() + ")</h1></html>";	
+			
+			return text;
 		}
 	}
 }

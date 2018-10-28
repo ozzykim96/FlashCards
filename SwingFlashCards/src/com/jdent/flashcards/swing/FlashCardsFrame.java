@@ -2,6 +2,7 @@ package com.jdent.flashcards.swing;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
@@ -144,6 +145,8 @@ public class FlashCardsFrame extends JFrame {
 		int width = node.getInt("width", Constants.DEFAULT_FRAME_WIDTH);
 		int height = node.getInt("height", Constants.DEFAULT_FRAME_HEIGHT);
 		setBounds(left, top, width, height);
+		
+		setPreferredSize(new Dimension(width, height));
 	}
 	
 	private void onClosingFrame() {

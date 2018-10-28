@@ -1,6 +1,7 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,6 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleContext;
+import javax.swing.text.html.HTMLDocument;
 
 import com.jdent.flashcards.card.CardSet;
 import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
@@ -44,15 +49,11 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 	}
 	
 	private void createUI() {
-		questionText = createTextPane();
+		questionText = createQuestionPane(); //createTextPane();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
-		questionScrollPane.setPreferredSize(
-				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));
 		
-		answerText = createTextPane();
+		answerText = createAnswerPane(); //createTextPane();
 		JScrollPane answerScrollPane = new JScrollPane(answerText);
-		answerScrollPane.setPreferredSize(
-				new Dimension(Constants.DEFAULT_LIST_WIDTH, Constants.DEFAULT_LIST_HEIGHT));		
 		
 		JPanel nextPane = createControlButtonPane();
 
@@ -63,22 +64,32 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		builder.build().grid(0, 0));
 		
 		add(questionScrollPane, 
-				builder.build().grid(0, 1).weight(1, 0.5));
+				builder.build().grid(0, 1).weight(1, 0.3));
 		add(new JLabel("Answer:"), 
 				builder.build().grid(0, 2));
 		
 		add(answerScrollPane, 
-				builder.build().grid(0, 3).weight(1, 0.5));
+				builder.build().grid(0, 3).weight(1, 0.7));
 		add(nextPane, 
 				builder.build().grid(0, 4));	
 	}
 	
-	private JTextPane createTextPane() {
+	private JTextPane createQuestionPane() {
 		JTextPane textPane = new JTextPane();
 		textPane.setCaretPosition(0);
-		textPane.setMargin(new Insets(5, 5, 5, 5));
 		
+		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
+				Constants.QUESTION_PANE_TEXT_FONT_SIZE));
 		return textPane;
+	}
+	
+	private JTextPane createAnswerPane() {
+		JTextPane textPane = new JTextPane();
+		textPane.setCaretPosition(0);
+		
+		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
+				Constants.ANSWER_PANE_TEXT_FONT_SIZE));
+		return textPane;		
 	}
 	
 	private JPanel createControlButtonPane() {
