@@ -1,10 +1,9 @@
 package com.jdent.flashcards.swing;
 
-import java.awt.Dimension;
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -78,19 +77,21 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	
 	private JTextPane createQuestionPane() {
 		JTextPane textPane = new JTextPane();
-		textPane.setCaretPosition(0);
-		
 		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
 				Constants.QUESTION_PANE_TEXT_FONT_SIZE));
+		textPane.setCaretPosition(0);
+		textPane.setEditable(false);
+		
 		return textPane;
 	}
 	
 	private JTextPane createAnswerPane() {
-		JTextPane textPane = new JTextPane();
-		textPane.setCaretPosition(0);
-		
+		JTextPane textPane = new JTextPane();		
 		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
 				Constants.ANSWER_PANE_TEXT_FONT_SIZE));
+		textPane.setCaretPosition(0);
+		textPane.setEditable(false);
+		
 		return textPane;		
 	}
 	
@@ -120,7 +121,6 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		});
 		
 		JPanel panel = new JPanel();
-		panel.add(new JLabel("Remember?"));
 		panel.add(yesButton);
 		panel.add(noButton);
 		
@@ -158,5 +158,4 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		
 		return nextPane;
 	}
-	
 }

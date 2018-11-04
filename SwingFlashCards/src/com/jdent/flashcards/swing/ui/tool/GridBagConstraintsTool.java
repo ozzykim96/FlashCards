@@ -24,5 +24,15 @@ public class GridBagConstraintsTool extends GridBagConstraints {
 		weightx = x;
 		weighty = y;
 		return this;
+	}	
+	
+	public GridBagConstraintsTool width(int width) {
+		this.gridwidth = width;
+		return this;
 	}
+	
+	public GridBagConstraintsTool height(int height) {
+		this.gridheight = height;
+		return this;
+	}	
 }

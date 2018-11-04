@@ -35,20 +35,10 @@ public class FlashCardsFrame extends JFrame {
 		super("FlashCards");
 		flashCardsFrame = this;
 
-		LOGGER.info("Load FlashCards.");
-
-		// flash cards
-		flashCards = new FlashCards();		
-		
-		// load saved flash cards
-		if (!flashCards.load()) {
-			LOGGER.warning("Loading failed. Load default card sets");
-			
-			flashCards.buildDefaultCardsList();
-		}
+		loadFlashCards();
 		
 		// frame initialization
-		onLoadingFrame();
+		loadFrame();
 		
 		// create menu bar
 		setJMenuBar(createMenuBar());
@@ -64,8 +54,9 @@ public class FlashCardsFrame extends JFrame {
 		
 		addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {		    	
-		    	onClosingFrame();
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {		
+		    	closeFlashCards();
+		    	saveFrame();
 		    	
 		    	LOGGER.info("Closing FlashCards.");
 		    }
@@ -106,8 +97,10 @@ public class FlashCardsFrame extends JFrame {
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LOGGER.info("Exit FlashCards.");
+
+				closeFlashCards();
+				saveFrame();
 				
-				onClosingFrame();
 				System.exit(0);
 			}
 		});
@@ -136,7 +129,29 @@ public class FlashCardsFrame extends JFrame {
 		return cards;
 	}
 	
-	private void onLoadingFrame() {
+	private void loadFlashCards() {
+		LOGGER.info("Load FlashCards.");
+
+		// flash cards
+		flashCards = new FlashCards();		
+		
+		// load saved flash cards
+		if (!flashCards.load()) {
+			LOGGER.warning("Loading failed. Load default card sets");
+			
+			flashCards.buildDefaultCardsList();
+		}		
+	}
+	
+	private void closeFlashCards() {
+		assert flashCards != null;
+		
+		LOGGER.info("Save FlashCards.");
+		
+		flashCards.save();
+	}
+	
+	private void loadFrame() {
 		Preferences root = Preferences.userRoot();
 		node = root.node("/com/jdent/flashcards/swing");
 		
@@ -149,7 +164,7 @@ public class FlashCardsFrame extends JFrame {
 		setPreferredSize(new Dimension(width, height));
 	}
 	
-	private void onClosingFrame() {
+	private void saveFrame() {
 		assert node != null;
 		
         node.putInt("left", getX());

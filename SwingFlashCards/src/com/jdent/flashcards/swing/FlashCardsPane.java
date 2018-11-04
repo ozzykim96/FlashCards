@@ -1,8 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -25,7 +23,6 @@ import javax.swing.event.ListSelectionListener;
 
 import com.jdent.flashcards.card.CardSet;
 import com.jdent.flashcards.card.CardSetList;
-import com.jdent.flashcards.swing.ui.FlashCardsLabel;
 import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
 
 public class FlashCardsPane extends JPanel 

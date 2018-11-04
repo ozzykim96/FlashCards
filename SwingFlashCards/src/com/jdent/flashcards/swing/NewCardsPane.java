@@ -1,10 +1,8 @@
 package com.jdent.flashcards.swing;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
@@ -15,10 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleContext;
-import javax.swing.text.html.HTMLDocument;
 
 import com.jdent.flashcards.card.CardSet;
 import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;

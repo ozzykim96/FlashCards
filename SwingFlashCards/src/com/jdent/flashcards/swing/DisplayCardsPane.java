@@ -1,8 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -115,6 +113,21 @@ public class DisplayCardsPane extends JPanel
 		list.setVisibleRowCount(30);
 		
 		return list;
+	}
+	
+	private JPanel createBackButtonPane() {
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FlashCardsFrame.getInstance().switchPane(Constants.FLASHCARDS_PANE, null);
+			}
+		});
+		
+		// create a panel for buttons
+		JPanel buttonPane = new JPanel();
+		buttonPane.add(backButton);
+		
+		return buttonPane;		
 	}
 	
 	private JPanel createControlButtonPane() {
