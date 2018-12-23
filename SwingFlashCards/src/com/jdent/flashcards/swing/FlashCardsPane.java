@@ -23,7 +23,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.jdent.flashcards.card.CardSet;
 import com.jdent.flashcards.card.CardSetList;
-import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsToolBuilder;
 
 public class FlashCardsPane extends JPanel 
 		implements ListSelectionListener, CardUIContext {
@@ -82,7 +82,7 @@ public class FlashCardsPane extends JPanel
 
 		// add to pane
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
 		
 		add(new JLabel("Select cards:"), 
 				builder.build().grid(0, 0));

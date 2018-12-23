@@ -12,6 +12,8 @@ public class GridBagConstraintsTool extends GridBagConstraints {
 		this.gridy = gbc.gridy;
 		this.weightx = gbc.weightx;
 		this.weighty = gbc.weighty;
+		
+		// TODO: set other properties
 	}
 	
 	public GridBagConstraintsTool grid(int x, int y) {

@@ -15,15 +15,14 @@ import javax.swing.JTextPane;
 
 import com.jdent.flashcards.card.Card;
 import com.jdent.flashcards.card.CardSet;
-import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsToolBuilder;
 
 public class StudyCardsPane extends JPanel implements CardUIContext {
 	private static final long serialVersionUID = 1L;
 	private CardSet cardSet;
 	private Card currentCard;
 	
-	private JTextPane questionText;
-	private JTextPane answerText;
+	private FlashCard flashCard;
 	
 	public StudyCardsPane() {
 		super(new GridBagLayout());
@@ -38,8 +37,9 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		
 		currentCard = cardSet.next();
 		
-		setQuestionText(currentCard.getName());
-		setAnswerText("");
+		flashCard.setQuestionAndAnswer(currentCard.getName(), 
+				currentCard.getDescription());
+		flashCard.setShowQuestionAndAnswer(true, false);		
 	}
 	
 	@Override
@@ -47,86 +47,19 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		
 	}
 	
-	private void createUI() {
-		questionText = createQuestionPane();
-		JScrollPane questionScrollPane = new JScrollPane(questionText);
-		
-		JPanel yesNoPane = createYesNoButtonPane();
-
-		answerText = createAnswerPane();
-		JScrollPane answerScrollPane = new JScrollPane(answerText);
-				
+	private void createUI() {		
+		flashCard = new FlashCard();
+						
 		JPanel nextPane = createControlButtonPane();
 
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
-
-		add(new JLabel("Question:"), 
-				builder.build().grid(0, 0));
-		add(questionScrollPane, 
-				builder.build().grid(0, 1).weight(1, 0.3));
-		add(yesNoPane, 
-				builder.build().grid(0, 2));
-		add(new JLabel("Answer:"), 
-				builder.build().grid(0, 3));		
-		add(answerScrollPane, 
-				builder.build().grid(0, 4).weight(1, 0.7));
-		add(nextPane, 
-				builder.build().grid(0, 5));		
-	}
-	
-	private JTextPane createQuestionPane() {
-		JTextPane textPane = new JTextPane();
-		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
-				Constants.QUESTION_PANE_TEXT_FONT_SIZE));
-		textPane.setCaretPosition(0);
-		textPane.setEditable(false);
+		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
 		
-		return textPane;
+		add(flashCard, builder.build().grid(0, 0).weight(1, 1));
+		add(nextPane,
+				builder.build().grid(0, 1));
 	}
-	
-	private JTextPane createAnswerPane() {
-		JTextPane textPane = new JTextPane();		
-		textPane.setFont(new Font(getFont().getName(), Font.BOLD, 
-				Constants.ANSWER_PANE_TEXT_FONT_SIZE));
-		textPane.setCaretPosition(0);
-		textPane.setEditable(false);
 		
-		return textPane;		
-	}
-	
-	private void setQuestionText(String text) {
-		questionText.setText(text);
-	}
-	
-	private void setAnswerText(String text) {
-		answerText.setText(text);
-	}
-
-	private JPanel createYesNoButtonPane() {
-		JButton yesButton = new JButton("Yes");
-		yesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setAnswerText(currentCard.getDescription());
-				currentCard.setStudied(true);
-			}
-		});
-		JButton noButton = new JButton("No");
-		noButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setAnswerText(currentCard.getDescription());
-			}
-		});
-		
-		JPanel panel = new JPanel();
-		panel.add(yesButton);
-		panel.add(noButton);
-		
-		return panel;
-	}
-	
 	private JPanel createControlButtonPane() {
 		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener() {
@@ -134,8 +67,9 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 			public void actionPerformed(ActionEvent e) {
 				currentCard = cardSet.nextStudy();
 				if (currentCard != null) {
-					setQuestionText(currentCard.getName());
-					setAnswerText("");
+					flashCard.setQuestionAndAnswer(currentCard.getName(), 
+							currentCard.getDescription());
+					flashCard.setShowQuestionAndAnswer(true, false);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No cards to study.");

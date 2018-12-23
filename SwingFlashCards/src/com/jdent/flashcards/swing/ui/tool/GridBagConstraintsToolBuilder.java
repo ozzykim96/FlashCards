@@ -2,10 +2,10 @@ package com.jdent.flashcards.swing.ui.tool;
 
 import java.awt.GridBagConstraints;
 
-public class GridBagConstraintsBuilder {
+public class GridBagConstraintsToolBuilder {
 	private GridBagConstraints gbc;
 	
-	public GridBagConstraintsBuilder(GridBagConstraints gbc) {
+	public GridBagConstraintsToolBuilder(GridBagConstraints gbc) {
 		this.gbc = gbc;
 	}
 	

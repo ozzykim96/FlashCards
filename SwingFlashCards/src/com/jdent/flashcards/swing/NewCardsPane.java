@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import com.jdent.flashcards.card.CardSet;
-import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsBuilder;
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsToolBuilder;
 
 public class NewCardsPane extends JPanel implements CardUIContext {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		JPanel nextPane = createControlButtonPane();
 
 		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsBuilder builder = new GridBagConstraintsBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
 		
 		add(new JLabel("Question:"), 
 		builder.build().grid(0, 0));
