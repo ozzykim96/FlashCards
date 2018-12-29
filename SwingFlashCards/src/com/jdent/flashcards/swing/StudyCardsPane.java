@@ -37,9 +37,8 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		
 		currentCard = cardSet.next();
 		
-		flashCard.setQuestionAndAnswer(currentCard.getName(), 
+		flashCard.setNewQuestionAndAnswer(currentCard.getName(), 
 				currentCard.getDescription());
-		flashCard.setShowQuestionAndAnswer(true, false);		
 	}
 	
 	@Override
@@ -67,9 +66,8 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 			public void actionPerformed(ActionEvent e) {
 				currentCard = cardSet.nextStudy();
 				if (currentCard != null) {
-					flashCard.setQuestionAndAnswer(currentCard.getName(), 
+					flashCard.setNewQuestionAndAnswer(currentCard.getName(), 
 							currentCard.getDescription());
-					flashCard.setShowQuestionAndAnswer(true, false);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No cards to study.");

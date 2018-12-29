@@ -22,7 +22,7 @@ public class StudyFlashCard extends JPanel {
 	private String answer;
 	
 	private boolean showQuestion = true;
-	private boolean showAnswer = false;
+	private boolean showAnswer = true;
 	
 	public StudyFlashCard() {
 		super(new GridBagLayout());
@@ -82,19 +82,14 @@ public class StudyFlashCard extends JPanel {
 	public void setNewQuestionAndAnswer(String question, String answer) {
 		this.question = question;
 		this.answer = answer;
-		
-		this.showAnswer = false;
+	
+		// hide answer
+		showQuestion = true;
+		showAnswer = false;
 		
 		updateLabels();
 	}
-	
-	public void setShowQuestionAndAnswer(boolean showQuestion, boolean showAnswer) {
-		this.showQuestion = showQuestion;
-		this.showAnswer = showAnswer;
 		
-		updateLabels();
-	}
-	
 	private void updateLabels() {
 		if (showQuestion) {
 			questionLabel.setText("<html><h1>" + question + "</h1></html>");
