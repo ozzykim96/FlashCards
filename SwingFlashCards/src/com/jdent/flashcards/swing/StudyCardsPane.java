@@ -22,7 +22,7 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	private CardSet cardSet;
 	private Card currentCard;
 	
-	private FlashCard flashCard;
+	private StudyFlashCard flashCard;
 	
 	public StudyCardsPane() {
 		super(new GridBagLayout());
@@ -48,12 +48,12 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 	}
 	
 	private void createUI() {		
-		flashCard = new FlashCard();
+		flashCard = new StudyFlashCard();
 						
 		JPanel nextPane = createControlButtonPane();
 
-		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = 
+				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(flashCard, builder.build().grid(0, 0).weight(1, 1));
 		add(nextPane,

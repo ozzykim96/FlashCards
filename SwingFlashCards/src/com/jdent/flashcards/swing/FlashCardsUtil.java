@@ -2,12 +2,15 @@ package com.jdent.flashcards.swing;
 
 import java.awt.GridBagConstraints;
 
-public class FlashCardsUtil {
-	public static GridBagConstraints getDefaultGridBagConstraints() {
-		GridBagConstraints gbc = new GridBagConstraints();
+import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsToolBuilder;
 
-		gbc.fill = GridBagConstraints.BOTH;
+public class FlashCardsUtil {	
+	public static GridBagConstraintsToolBuilder makeDefaultGridBagConstraintsBuilder() {
+		GridBagConstraints gbc = new GridBagConstraints();
 		
-		return gbc;
+		// default properties
+		gbc.fill = GridBagConstraints.BOTH;
+
+		return new GridBagConstraintsToolBuilder(gbc);
 	}
 }

@@ -81,8 +81,8 @@ public class FlashCardsPane extends JPanel
 		JPanel controlButtonPane = createControlButtonPane();
 
 		// add to pane
-		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = 
+				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(new JLabel("Select cards:"), 
 				builder.build().grid(0, 0));

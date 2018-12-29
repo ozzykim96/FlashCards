@@ -12,7 +12,7 @@ import javax.swing.JScrollPane;
 
 import com.jdent.flashcards.swing.ui.tool.GridBagConstraintsToolBuilder;
 
-public class FlashCard extends JPanel {
+public class StudyFlashCard extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private JLabel questionLabel;
@@ -24,7 +24,7 @@ public class FlashCard extends JPanel {
 	private boolean showQuestion = true;
 	private boolean showAnswer = false;
 	
-	public FlashCard() {
+	public StudyFlashCard() {
 		super(new GridBagLayout());
 		
 		createUI();
@@ -32,14 +32,13 @@ public class FlashCard extends JPanel {
 	
 	private void createUI() {
 		questionLabel = createQuestionLabel();
-		
 		JScrollPane questionScrollPane = new JScrollPane(questionLabel);
 		
 		answerLabel = createAnswerLabel();
 		JScrollPane answerScrollPane = new JScrollPane(answerLabel);
 				
-		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = 
+				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(questionScrollPane, 
 				builder.build().grid(0, 0).weight(1, 0.3));
@@ -80,9 +79,11 @@ public class FlashCard extends JPanel {
 		return label;
 	}
 	
-	public void setQuestionAndAnswer(String question, String answer) {
+	public void setNewQuestionAndAnswer(String question, String answer) {
 		this.question = question;
 		this.answer = answer;
+		
+		this.showAnswer = false;
 		
 		updateLabels();
 	}
@@ -93,7 +94,7 @@ public class FlashCard extends JPanel {
 		
 		updateLabels();
 	}
-
+	
 	private void updateLabels() {
 		if (showQuestion) {
 			questionLabel.setText("<html><h1>" + question + "</h1></html>");

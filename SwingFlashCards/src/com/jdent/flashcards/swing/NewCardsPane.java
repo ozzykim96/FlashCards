@@ -51,8 +51,8 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		
 		JPanel nextPane = createControlButtonPane();
 
-		GridBagConstraints gbc = FlashCardsUtil.getDefaultGridBagConstraints();
-		GridBagConstraintsToolBuilder builder = new GridBagConstraintsToolBuilder(gbc);
+		GridBagConstraintsToolBuilder builder = 
+				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(new JLabel("Question:"), 
 		builder.build().grid(0, 0));
