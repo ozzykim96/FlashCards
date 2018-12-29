@@ -63,26 +63,34 @@ public class FlashCardsFrame extends JFrame {
 		});		
 		
 		// switch to the first pane, Constants.FLASHCARDS_PANE
-		switchPane(Constants.FLASHCARDS_PANE, flashCards.getCardsList());
+		switchPaneTo(Constants.FLASHCARDS_PANE, flashCards.getCardsList());
 	}
 	
-	public static FlashCardsFrame getInstance() {
-		return flashCardsFrame;
-	}
-	
-	public void switchPane(String name, Object obj) {
-		CardUIContext context = (CardUIContext)cardPaneMap.get(name);
-		assert context != null;
-		
-		// set context
-		if (obj != null) {
-			context.setContext(obj);		
-		}
-		context.refreshContents();
+	private void loadFlashCards() {
+		LOGGER.info("Load FlashCards.");
 
-		// show card pane
-		CardLayout cl = (CardLayout)cardPane.getLayout();
-		cl.show(cardPane, name);
+		// flash cards
+		flashCards = new FlashCards();		
+		
+		// load saved flash cards
+		if (!flashCards.load()) {
+			LOGGER.warning("Loading failed. Load default card sets");
+			
+			flashCards.buildDefaultCardsList();
+		}		
+	}
+	
+	private void loadFrame() {
+		Preferences root = Preferences.userRoot();
+		node = root.node("/com/jdent/flashcards/swing");
+		
+		int left = node.getInt("left", 0);
+		int top = node.getInt("top", 0);
+		int width = node.getInt("width", Constants.DEFAULT_FRAME_WIDTH);
+		int height = node.getInt("height", Constants.DEFAULT_FRAME_HEIGHT);
+		setBounds(left, top, width, height);
+		
+		setPreferredSize(new Dimension(width, height));
 	}
 	
 	private JMenuBar createMenuBar() {
@@ -128,21 +136,7 @@ public class FlashCardsFrame extends JFrame {
 		
 		return cards;
 	}
-	
-	private void loadFlashCards() {
-		LOGGER.info("Load FlashCards.");
-
-		// flash cards
-		flashCards = new FlashCards();		
 		
-		// load saved flash cards
-		if (!flashCards.load()) {
-			LOGGER.warning("Loading failed. Load default card sets");
-			
-			flashCards.buildDefaultCardsList();
-		}		
-	}
-	
 	private void closeFlashCards() {
 		assert flashCards != null;
 		
@@ -150,20 +144,7 @@ public class FlashCardsFrame extends JFrame {
 		
 		flashCards.save();
 	}
-	
-	private void loadFrame() {
-		Preferences root = Preferences.userRoot();
-		node = root.node("/com/jdent/flashcards/swing");
 		
-		int left = node.getInt("left", 0);
-		int top = node.getInt("top", 0);
-		int width = node.getInt("width", Constants.DEFAULT_FRAME_WIDTH);
-		int height = node.getInt("height", Constants.DEFAULT_FRAME_HEIGHT);
-		setBounds(left, top, width, height);
-		
-		setPreferredSize(new Dimension(width, height));
-	}
-	
 	private void saveFrame() {
 		assert node != null;
 		
@@ -171,5 +152,24 @@ public class FlashCardsFrame extends JFrame {
         node.putInt("top", getY());
         node.putInt("width", getWidth());
         node.putInt("height", getHeight());
+	}
+
+	public static FlashCardsFrame getInstance() {
+		return flashCardsFrame;
+	}
+	
+	public void switchPaneTo(String name, Object obj) {
+		CardUIContext context = (CardUIContext)cardPaneMap.get(name);
+		assert context != null;
+		
+		// set context
+		if (obj != null) {
+			context.setContext(obj);		
+		}
+		context.refreshContents();
+
+		// show card pane
+		CardLayout cl = (CardLayout)cardPane.getLayout();
+		cl.show(cardPane, name);
 	}
 }

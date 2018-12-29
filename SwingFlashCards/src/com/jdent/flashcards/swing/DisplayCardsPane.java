@@ -1,7 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Component;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,35 +40,7 @@ public class DisplayCardsPane extends JPanel
 		
 		createUI();
 	}
-	
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		refreshUI();
-	}
-	
-	@Override
-	public void setContext(Object obj) {
-		cardSet = (CardSet)obj;	
-		loadContents();
-	}
-	
-	@Override
-	public void refreshContents() {
-		loadContents();
-		refreshUI();
-	}
-	
-	private void loadContents() {
-		// remove all elements
-		listModel.removeAllElements();
 		
-		// add cards
-		// display card list
-		for (Card card: cardSet.getList()) {
-			listModel.addElement(card);
-		}
-	}	
-	
 	private void createUI() {
 		// create list and scroll pane
 		list = createDisplayCardsList();
@@ -88,18 +59,7 @@ public class DisplayCardsPane extends JPanel
 		add(controlButtonPane, 
 				builder.build().grid(0, 2));		
 	}
-	
-	private void refreshUI() {
-		int index = list.getSelectedIndex();
 		
-		if (index >= 0) {
-			deleteCardButton.setEnabled(true);
-		}
-		else {
-			deleteCardButton.setEnabled(false);
-		}
-	}	
-	
 	private JList<Card> createDisplayCardsList() {
 		listModel = new DefaultListModel<>();
 		
@@ -114,21 +74,6 @@ public class DisplayCardsPane extends JPanel
 		return list;
 	}
 	
-	private JPanel createBackButtonPane() {
-		JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.FLASHCARDS_PANE, null);
-			}
-		});
-		
-		// create a panel for buttons
-		JPanel buttonPane = new JPanel();
-		buttonPane.add(backButton);
-		
-		return buttonPane;		
-	}
-	
 	private JPanel createControlButtonPane() {
 		// create buttons
 		JButton studyButton = new JButton("Study");
@@ -139,7 +84,7 @@ public class DisplayCardsPane extends JPanel
 					JOptionPane.showMessageDialog(FlashCardsFrame.getInstance(), "No cards to study.");
 				}
 				else {
-					FlashCardsFrame.getInstance().switchPane(Constants.STUDYCARDS_PANE, cardSet);	
+					FlashCardsFrame.getInstance().switchPaneTo(Constants.STUDYCARDS_PANE, cardSet);	
 				}				
 			}
 		});
@@ -162,7 +107,7 @@ public class DisplayCardsPane extends JPanel
 		JButton addCardButton = new JButton("Add");
 		addCardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.NEWCARDS_PANE, cardSet);
+				FlashCardsFrame.getInstance().switchPaneTo(Constants.NEWCARDS_PANE, cardSet);
 			}
 		});
 		deleteCardButton = new JButton("Delete");
@@ -187,7 +132,7 @@ public class DisplayCardsPane extends JPanel
 		JButton backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.FLASHCARDS_PANE, null);
+				FlashCardsFrame.getInstance().switchPaneTo(Constants.FLASHCARDS_PANE, null);
 			}
 		});
 		
@@ -202,6 +147,45 @@ public class DisplayCardsPane extends JPanel
 		return buttonPane;
 	}
 	
+	private void loadContents() {
+		// remove all elements
+		listModel.removeAllElements();
+		
+		// add cards
+		// display card list
+		for (Card card: cardSet.getList()) {
+			listModel.addElement(card);
+		}
+	}	
+	
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		refreshUI();
+	}
+	
+	@Override
+	public void setContext(Object obj) {
+		cardSet = (CardSet)obj;	
+		loadContents();
+	}
+	
+	@Override
+	public void refreshContents() {
+		loadContents();
+		refreshUI();
+	}
+	
+	private void refreshUI() {
+		int index = list.getSelectedIndex();
+		
+		if (index >= 0) {
+			deleteCardButton.setEnabled(true);
+		}
+		else {
+			deleteCardButton.setEnabled(false);
+		}
+	}	
+
 	private class CardRenderer extends JLabel implements ListCellRenderer<Card> {
 		private static final long serialVersionUID = 1L;
 

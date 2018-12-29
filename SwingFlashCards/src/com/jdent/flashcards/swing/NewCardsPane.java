@@ -1,7 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,21 +31,10 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		createUI();
 	}
 	
-	@Override
-	public void setContext(Object obj) {
-		cardSet = (CardSet)obj;
-	}
-	
-	@Override
-	public void refreshContents() {
-		
-	}
-	
 	private void createUI() {
-		questionText = createQuestionPane(); //createTextPane();
+		questionText = createQuestionPane();
 		JScrollPane questionScrollPane = new JScrollPane(questionText);
-		
-		answerText = createAnswerPane(); //createTextPane();
+		answerText = createAnswerPane();
 		JScrollPane answerScrollPane = new JScrollPane(answerText);
 		
 		JPanel nextPane = createControlButtonPane();
@@ -55,7 +43,7 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(new JLabel("Question:"), 
-		builder.build().grid(0, 0));
+				builder.build().grid(0, 0));
 		
 		add(questionScrollPane, 
 				builder.build().grid(0, 1).weight(1, 0.3));
@@ -106,7 +94,7 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		JButton backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, cardSet);
+				FlashCardsFrame.getInstance().switchPaneTo(Constants.DISPLAYCARDS_PANE, cardSet);
 			}
 		});	
 
@@ -116,4 +104,14 @@ public class NewCardsPane extends JPanel implements CardUIContext {
 		
 		return nextPane;
 	}	
+
+	@Override
+	public void setContext(Object obj) {
+		cardSet = (CardSet)obj;
+	}
+	
+	@Override
+	public void refreshContents() {
+		
+	}
 }

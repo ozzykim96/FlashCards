@@ -1,7 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Component;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -152,7 +151,7 @@ public class FlashCardsPane extends JPanel
 						CardSet cardSet = cardSetList.getCards(index);
 						
 						FlashCardsFrame.getInstance()
-								.switchPane(Constants.DISPLAYCARDS_PANE, cardSet);						
+								.switchPaneTo(Constants.DISPLAYCARDS_PANE, cardSet);						
 					}
 				}
 			}
@@ -173,7 +172,7 @@ public class FlashCardsPane extends JPanel
 					
 					CardSet cardSet = cardSetList.getCards(index);
 					FlashCardsFrame.getInstance()
-						.switchPane(Constants.DISPLAYCARDS_PANE, cardSet);
+						.switchPaneTo(Constants.DISPLAYCARDS_PANE, cardSet);
 				}				
 			}
 		});

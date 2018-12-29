@@ -1,7 +1,6 @@
 package com.jdent.flashcards.swing;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,10 +39,14 @@ public class StudyFlashCard extends JPanel {
 		GridBagConstraintsToolBuilder builder = 
 				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
+		add(new JLabel("Question:"), 
+				builder.build().grid(0, 0));		
 		add(questionScrollPane, 
-				builder.build().grid(0, 0).weight(1, 0.3));
+				builder.build().grid(0, 1).weight(1, 0.3));
+		add(new JLabel("Answer:"), 
+				builder.build().grid(0, 2));		
 		add(answerScrollPane, 
-				builder.build().grid(0, 1).weight(1, 0.7));
+				builder.build().grid(0, 3).weight(1, 0.7));
 	}
 
 	private JLabel createQuestionLabel() {
@@ -99,7 +102,7 @@ public class StudyFlashCard extends JPanel {
 		}
 		
 		if (showAnswer) {
-			answerLabel.setText("<html><p>" + answer + "</p></html>");
+			answerLabel.setText("<html><h1>" + answer + "</h1></html>");
 		}
 		else {
 			answerLabel.setText("<html><h1>( Answer )</h1></html>");

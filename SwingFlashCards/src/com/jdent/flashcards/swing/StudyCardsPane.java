@@ -1,17 +1,11 @@
 package com.jdent.flashcards.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 
 import com.jdent.flashcards.card.Card;
 import com.jdent.flashcards.card.CardSet;
@@ -30,36 +24,35 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 		createUI();
 	}
 
-	@Override
-	public void setContext(Object obj) {
-		cardSet = (CardSet)obj;
-		cardSet.reset();
-		
-		currentCard = cardSet.next();
-		
-		flashCard.setNewQuestionAndAnswer(currentCard.getName(), 
-				currentCard.getDescription());
-	}
-	
-	@Override
-	public void refreshContents() {
-		
-	}
-	
 	private void createUI() {		
 		flashCard = new StudyFlashCard();
-						
-		JPanel nextPane = createControlButtonPane();
+		JPanel controlPanel = createControlPanel();
 
 		GridBagConstraintsToolBuilder builder = 
 				FlashCardsUtil.makeDefaultGridBagConstraintsBuilder();
 		
 		add(flashCard, builder.build().grid(0, 0).weight(1, 1));
-		add(nextPane,
+		add(controlPanel,
 				builder.build().grid(0, 1));
 	}
 		
-	private JPanel createControlButtonPane() {
+	private JPanel createControlPanel() {
+		JButton checkButton = new JButton("Check");
+		checkButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currentCard.setStudied(true);
+				currentCard = cardSet.nextStudy();
+				if (currentCard != null) {
+					flashCard.setNewQuestionAndAnswer(currentCard.getName(), 
+							currentCard.getDescription());
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "No cards to study.");
+					FlashCardsFrame.getInstance().switchPaneTo(Constants.DISPLAYCARDS_PANE, null);
+				}				
+			}
+		});
 		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(new ActionListener() {
 			@Override
@@ -71,23 +64,39 @@ public class StudyCardsPane extends JPanel implements CardUIContext {
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "No cards to study.");
-					FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, null);
-				}
-				
+					FlashCardsFrame.getInstance().switchPaneTo(Constants.DISPLAYCARDS_PANE, null);
+				}				
 			}
 		});
 		JButton backButton = new JButton("Back");
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlashCardsFrame.getInstance().switchPane(Constants.DISPLAYCARDS_PANE, null);
+				FlashCardsFrame.getInstance().switchPaneTo(Constants.DISPLAYCARDS_PANE, null);
 			}
 		});	
 		
-		JPanel nextPane = new JPanel();
-		nextPane.add(nextButton);
-		nextPane.add(backButton);
+		JPanel pnl = new JPanel();
+		pnl.add(checkButton);
+		pnl.add(nextButton);
+		pnl.add(backButton);
 		
-		return nextPane;
+		return pnl;
 	}
+
+	@Override
+	public void setContext(Object obj) {
+		cardSet = (CardSet)obj;
+		cardSet.reset();
+		currentCard = cardSet.nextStudy();
+		
+		flashCard.setNewQuestionAndAnswer(currentCard.getName(), 
+				currentCard.getDescription());
+	}
+	
+	@Override
+	public void refreshContents() {
+		
+	}
+	
 }
